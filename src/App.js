@@ -10,7 +10,7 @@ function App() {
   const [priorityQueue, setPriorityQueue] = useState([]);
   const [totalHit, setTotalHit] = useState(0);
   const [referenceString, setReferenceString] = useState("");
-  const frame = 3;
+
   const checkHit = () => {
     for (let i = 0; i < priorityQueue.length; i++) {
       if (priorityQueue[i].value === value) {
@@ -41,11 +41,11 @@ function App() {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    if (!checkHit()) {
-      toast.error("Miss!", { duration: 1700, iconTheme: "primary" });
-      handleMiss();
+    if (checkHit()) {
+      toast.success("Hit!");
     } else {
-      toast.success("Fault!");
+      toast.error("Miss!", { duration: 1700 });
+      handleMiss();
     }
     setReferenceString(referenceString + " " + value);
   };
