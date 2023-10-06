@@ -10,6 +10,7 @@ function App() {
   const [priorityQueue, setPriorityQueue] = useState([]);
   const [totalHit, setTotalHit] = useState(0);
   const [referenceString, setReferenceString] = useState("");
+  const [hit, setHit] = useState([]);
 
   const checkHit = () => {
     for (let i = 0; i < priorityQueue.length; i++) {
@@ -42,8 +43,10 @@ function App() {
     e.preventDefault();
 
     if (checkHit()) {
+      setHit([...hit, "H"]);
       toast.success("Hit!");
     } else {
+      setHit([...hit, "M"]);
       toast.error("Miss!", { duration: 1700 });
       handleMiss();
     }
@@ -58,6 +61,7 @@ function App() {
     setReferenceString("");
     setValue("");
     setPageFrame("");
+    setHit([]);
   };
 
   useEffect(() => {
@@ -65,12 +69,16 @@ function App() {
       value: item.value,
       counter: item.counter,
     }));
+    console.log(updatedPriorityQueue);
     setOutput([...output, updatedPriorityQueue]);
-    console.log(pageFrame);
+    console.log(hit);
   }, [priorityQueue]);
 
   return (
-    <div className="text-center" style={{ marginTop: "14vh" }}>
+    <div
+      className="text-center bg-body-tertiary"
+      style={{ paddingTop: "14vh", minHeight: "100vh" }}
+    >
       <h1>REFERENCE STRING</h1>
       <h1 className="p-2 mx-2" style={{ minHeight: "10vh", width: "auto" }}>
         {referenceString}
@@ -116,17 +124,24 @@ function App() {
           </h5>
         </div>
         <div className="mb-3 mx-5 d-flex ">
-          {output.map((row, rowIndex) => (
-            <div className="mb-3 px-2" key={rowIndex}>
-              {row.map((item, colIndex) => (
-                <div key={colIndex}>
+          {output.map((row, colIndex) => (
+            <div className="mb-3 px-2" key={colIndex}>
+              {hit[colIndex - 1] === "M" ? (
+                <h4 className="text-danger">{hit[colIndex - 1]}</h4>
+              ) : (
+                <h4 className="text-success">{hit[colIndex - 1]}</h4>
+              )}
+              {row.map((item, rowIndex) => (
+                <div key={rowIndex}>
                   <Badge
                     count={item.counter}
                     showZero
                     offset={[0, 50]}
                     color="#1065e3ba"
                   >
-                    <h2 className="border p-2">{item.value}</h2>
+                    <h2 className="border border-secondary p-2">
+                      {item.value}
+                    </h2>
                   </Badge>
                 </div>
               ))}
