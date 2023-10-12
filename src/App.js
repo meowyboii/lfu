@@ -53,8 +53,7 @@ function App() {
     setReferenceString(referenceString + " " + value);
   };
 
-  const handleReset = (e) => {
-    e.preventDefault();
+  const handleReset = () => {
     setPriorityQueue([]);
     setOutput([]);
     setTotalHit(0);
@@ -92,7 +91,10 @@ function App() {
               style={{ width: "20%" }}
               className="form-control mx-auto mb-3 "
               value={pageFrame}
-              onChange={(e) => setPageFrame(e.target.value)}
+              onChange={(e) => {
+                handleReset();
+                setPageFrame(e.target.value);
+              }}
               required={true}
             />
           </form>
